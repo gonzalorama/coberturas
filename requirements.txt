@@ -1,0 +1,6 @@
+langchain
+openapi-python-client
+chainlit
+fastapi
+uvicorn
+pydantic
