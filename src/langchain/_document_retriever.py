@@ -1,12 +1,12 @@
 from langchain.embeddings import OpenAIEmbeddings
 from chromadb import Client
-from chromadb.config import Settings
+from chromadb import Settings
 import openai
 import os
 
 class CompanyDocumentRetriever:
-    def __init__(self, chroma_url):
-        self.client = Client(Settings(chroma_url))
+    def __init__(self):
+        self.client = Client(Settings(chroma_api_url="http://localhost:8000"))
         self.embedding_model = OpenAIEmbeddings()
         openai.api_key = os.getenv("OPENAI_API_KEY")
 
