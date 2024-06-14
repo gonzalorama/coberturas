@@ -1,6 +1,6 @@
 import os
-from langchain.document_loaders import UnstructuredPDFLoader
-from langchain.embeddings import OpenAIEmbeddings
+from langchain_community.document_loaders import UnstructuredPDFLoader
+from langchain_community.embeddings import OpenAIEmbeddings
 from typing import List, Dict
 from chromadb import PersistentClient
 

@@ -1,5 +1,5 @@
 import chainlit as cl
-from src.langchain._document_retriever import CompanyDocumentRetriever
+from langchain._document_retriever import CompanyDocumentRetriever
 
 document_retriever = CompanyDocumentRetriever()
 companies = ["Allianz", "Generali", "Liberty", "Mapfre", "Mutua Madrileña", "Occident", "Santa Lucía", "Zurich"]

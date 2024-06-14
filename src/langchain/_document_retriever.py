@@ -1,6 +1,5 @@
-from langchain.embeddings import OpenAIEmbeddings
-from chromadb import PersistentCliente
-from chromadb import Settings
+from langchain_community.embeddings import OpenAIEmbeddings
+from chromadb import PersistentClient
 import openai
 import os
 

@@ -16,6 +16,10 @@ RUN apt-get update && apt-get install -y \
 RUN git clone https://github.com/gonzalorama/coberturas.git /app
 WORKDIR /app
 
+# Aceptar el argumento de construcción para la clave de API de OpenAI
+ARG OPENAI_API_KEY
+ENV OPENAI_API_KEY=${OPENAI_API_KEY}
+
 # Instalar las dependencias de Python
 RUN pip3 install -r requirements.txt
 

@@ -1,5 +1,6 @@
 langchain
 langchain-core
+langchain-community
 chromadb
 openapi-python-client
 chainlit
