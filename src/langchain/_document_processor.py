@@ -2,8 +2,7 @@ import os
 from langchain.document_loaders import UnstructuredPDFLoader
 from langchain.embeddings import OpenAIEmbeddings
 from typing import List, Dict
-from chromadb import Client
-from chromadb.config import Settings
+from chromadb import PersistentClient
 
 class CompanyDocumentLoader:
     def __init__(self, root_path: str):
@@ -28,8 +27,8 @@ class CompanyDocumentLoader:
         return company_documents
 
 class CompanyDocumentIndexer:
-    def __init__(self, chroma_url):
-        self.client = Client(Settings(chroma_url))
+    def __init__(self):
+        self.client = PersistentClient()
         self.embedding_model = OpenAIEmbeddings()
 
     def index_all_company_documents(self, root_path):

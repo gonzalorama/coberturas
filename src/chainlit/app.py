@@ -1,8 +1,5 @@
 import chainlit as cl
 from src.langchain._document_retriever import CompanyDocumentRetriever
-from src.api.openai import OpenAI
-
-OpenAI()
 
 document_retriever = CompanyDocumentRetriever()
 companies = ["Allianz", "Generali", "Liberty", "Mapfre", "Mutua Madrileña", "Occident", "Santa Lucía", "Zurich"]
