@@ -1,19 +1,35 @@
 import chainlit as cl
-from langchain._document_retriever import CompanyDocumentRetriever
+from src.langchain._document_retriever import CompanyDocumentRetriever
+from chainlit.input_widget import Select
 
 document_retriever = CompanyDocumentRetriever()
 companies = ["Allianz", "Generali", "Liberty", "Mapfre", "Mutua Madrileña", "Occident", "Santa Lucía", "Zurich"]
+companies=[
+            cl.Action(name="allianz", value="allianz", label="Allianz"),
+            cl.Action(name="generali", value="generali", label="Generali"),
+            cl.Action(name="liberty", value="liberty", label="Liberty"),
+            cl.Action(name="mapfre", value="mapfre", label="Mapfre"),
+            cl.Action(name="mutua", value="mutua", label="Mutua Madrileña"),
+            cl.Action(name="occident", value="occident", label="Occident"),
+            cl.Action(name="santalucia", value="santalucia", label="Santa Lucía"),
+            cl.Action(name="zurich", value="zurich", label="Zurich"),
+        ]
+@cl.on_chat_start
+async def main():
+    res = await cl.AskActionMessage(
+        content="¡Hola, soy asesor de coberturas de seguros del Hogar!\n\nSelecciona tu compañia:",
+        actions=companies,
+    ).send()
 
-@cl.app
-def main():
-    cl.page("Asistente de coberturas de seguros del hogar")
+    cl.user_session.set("company", res.get("value"))
 
-    # Presenta las opciones de compañías al usuario
-    selected_company = cl.select("Por favor, seleccione la compañía:", options=companies)
-    
-    # Obtiene la pregunta del usuario
-    query = cl.input("Haga una pregunta sobre la compañía:")
-    
-     # Genera y muestra la respuesta relevante
-    answer = document_retriever.generate_answer(selected_company, query)
-    cl.text(f"Respuesta: {answer}")
+    await cl.Message(
+        content="¡Genial!, ¿Cúal es tu duda con tu póliza?",
+    ).send()
+
+@cl.on_message
+async def on_message(message: cl.Message):
+    company = cl.user_session.get("company")
+    print(company)
+    response = document_retriever.generate_answer(query=message.content, company_name=company)
+    await cl.Message(response).send()

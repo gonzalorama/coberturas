@@ -1,28 +1,52 @@
-from langchain_community.embeddings import OpenAIEmbeddings
+from langchain_openai import OpenAIEmbeddings
+from langchain_openai import ChatOpenAI
+from langchain_core.prompts import ChatPromptTemplate
 from chromadb import PersistentClient
+from chromadb.utils import embedding_functions
 import openai
 import os
 
 class CompanyDocumentRetriever:
     def __init__(self):
-        self.client = PersistentClient()
+        self.client = PersistentClient(
+            path="/home/gonzalo/coberturas/data/chroma" 
+        )
         self.embedding_model = OpenAIEmbeddings()
-        openai.api_key = os.getenv("OPENAI_API_KEY")
+        self.llm = ChatOpenAI(
+            model="gpt-4o",
+            temperature=0.8,
+            max_tokens=None,
+            timeout=None,
+            max_retries=2,
+        )
 
     def retrieve_documents(self, company_name, query):
-        query_vector = self.embedding_model.encode(query)
         collection = self.client.get_collection(company_name)
-        results = collection.query(query_vector, n_results=5)
-        return results
+        sentence_transformer_ef = embedding_functions.SentenceTransformerEmbeddingFunction(model_name="paraphrase-multilingual-mpnet-base-v2")
+        vector = sentence_transformer_ef(query)
+        results = collection.query(
+            query_embeddings=vector, 
+            n_results=5
+        )
+        return results['documents'][0]
     
     def generate_answer(self, company_name, query):
         documents = self.retrieve_documents(company_name, query)
-        context = "\n\n".join([doc['text'] for doc in documents])
-        
-        response = openai.Completion.create(
-            engine="gpt-4o",
-            prompt=f"Contexto: {context}\n\nPregunta: {query}\n\nRespuesta:",
-            max_tokens=250
+        context = "\n\n".join([doc for doc in documents])
+        prompt = ChatPromptTemplate.from_messages(
+            [
+                (
+                    "system",
+                    "Eres un experto asesor en seguros del hogar y debes contestar la pregunta con el contexto dado que se corresponde a los datos extraidos de la poliza.",
+                ),
+                ("human", "Contexto: {context}\n\nPregunta: {query}"),
+            ]
         )
-        
-        return response.choices[0].text.strip()
+        llm_chain = prompt | self.llm
+        print(context)
+        return llm_chain.invoke(
+            {
+                "query": query,
+                "context": context,
+            }
+        ).content
