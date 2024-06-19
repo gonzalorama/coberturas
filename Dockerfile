@@ -16,6 +16,8 @@ RUN apt-get update && apt-get install -y \
 RUN git clone https://github.com/gonzalorama/coberturas.git /app
 WORKDIR /app
 
+ENV PYTHONPATH "${PYTHONPATH}:/your/custom/path"
+
 # Aceptar el argumento de construcción para la clave de API de OpenAI
 ARG OPENAI_API_KEY
 ENV OPENAI_API_KEY=${OPENAI_API_KEY}
