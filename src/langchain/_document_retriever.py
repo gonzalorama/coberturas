@@ -13,7 +13,7 @@ class CompanyDocumentRetriever:
         )
         self.embedding_model = OpenAIEmbeddings()
         self.llm = ChatOpenAI(
-            model="gpt-4o",
+            model="gpt-3.5-turbo-0125",
             temperature=0.8,
             max_tokens=None,
             timeout=None,
