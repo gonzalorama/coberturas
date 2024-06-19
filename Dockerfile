@@ -1,5 +1,5 @@
 # Usar una imagen base de Ubuntu
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 # Configurar el entorno no interactivo
 ENV DEBIAN_FRONTEND=noninteractive
@@ -16,7 +16,7 @@ RUN apt-get update && apt-get install -y \
 RUN git clone https://github.com/gonzalorama/coberturas.git /app
 WORKDIR /app
 
-ENV PYTHONPATH "${PYTHONPATH}:/your/custom/path"
+ENV PYTHONPATH "${PYTHONPATH}:/app"
 
 # Aceptar el argumento de construcción para la clave de API de OpenAI
 ARG OPENAI_API_KEY
@@ -26,7 +26,7 @@ ENV OPENAI_API_KEY=${OPENAI_API_KEY}
 RUN pip3 install -r requirements.txt
 
 # Exponer el puerto solo para la aplicación
-EXPOSE 8501
+EXPOSE 8000
 
 # Configurar el punto de entrada para iniciar la aplicación
-CMD ["sh", "-c", "chainlit run src/chainlit/app.py --host 0.0.0.0 --port 8501"]
+CMD ["sh", "-c", "chainlit run src/chainlit/app.py --host 0.0.0.0 --port 8000"]
