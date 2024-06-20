@@ -21,7 +21,7 @@ RUN rm .chainlit/config.toml
 RUN cp src/chainlit/.chainlit/config.toml .chainlit/
 
 ENV PYTHONPATH "${PYTHONPATH}:/app"
-ENV CHORMA_DB_PATH "/app/data/chroma"
+ENV CHROMA_DB_PATH "/app/data/chroma"
 
 # Aceptar el argumento de construcción para la clave de API de OpenAI
 ARG OPENAI_API_KEY
