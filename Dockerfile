@@ -16,6 +16,10 @@ RUN apt-get update && apt-get install -y \
 RUN git clone https://github.com/gonzalorama/coberturas.git /app
 WORKDIR /app
 
+RUN cp -Rf src/chainlit/public .
+RUN rm .chainlit/config.toml
+RUN cp src/chainlit/.chainlit/config.toml .chainlit/
+
 ENV PYTHONPATH "${PYTHONPATH}:/app"
 
 # Aceptar el argumento de construcción para la clave de API de OpenAI
