@@ -9,7 +9,7 @@ import os
 class CompanyDocumentRetriever:
     def __init__(self):
         self.client = PersistentClient(
-            path="/home/gonzalo/coberturas/data/chroma" 
+            path=os.environ.get('CHROMA_DB_PATH') 
         )
         self.embedding_model = OpenAIEmbeddings()
         self.llm = ChatOpenAI(
